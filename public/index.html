@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Message Saver</title>
+  <style>
+    body {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-size: 16px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>This website is going to listen to you, so let your heart out 📩</h1>
+  <textarea id="textInput" placeholder="Type something on your mind when you're free..."></textarea><br>
+  <button onclick="submitText()">Save</button>
+
+  <script>
+    function submitText() {
+      const text = document.getElementById('textInput').value.trim();
+
+      if (!text) {
+        alert('⚠️ Please type something before saving.');
+        return;
+      }
+
+      fetch('http://localhost:3000/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(`✅ ${data.message}`);
+        document.getElementById('textInput').value = ''; // clear textarea
+      })
+      .catch(err => {
+        console.error(err);
+        alert('❌ Error saving message');
+      });
+    }
+  </script>
+</body>
+</html>
+
+
